@@ -1480,8 +1480,660 @@
     </div>
   </section>
 
-  <!-- Continue with remaining modules... -->
-  <!-- Module 4, 5, 6 to be added in next part -->
+  <!-- Module 4: Tool Use - Giving Agents Superpowers -->
+  <section class="module" id="module-4" style="background: var(--color-bg-warm)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">04</span>
+        <h1 class="module-title">Tool Use — Giving Agents Superpowers</h1>
+        <p class="module-subtitle">How agents go from chatbots to systems that actually DO things</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Tools are where the magic happens</h2>
+          <p>
+            You've seen an agent call a simple <code>get_destinations</code> function. But tools can be so much more — they're how agents interact with the real world.
+          </p>
+          <p>
+            A <span class="term" data-definition="A tool is a function the agent can call to perform an action or retrieve information. Tools can be anything from simple Python functions to API calls, database queries, or even code execution environments.">tool</span> can be anything: a database query, an API call, a code interpreter, a web search. Agents without tools are just chatbots. Agents <em>with</em> tools can book flights, analyze data, send emails, and automate workflows.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">What kinds of tools can agents use?</h2>
+
+          <div class="pattern-cards">
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+              <div class="pattern-icon" style="background: var(--color-actor-1)">🗄️</div>
+              <h4 class="pattern-title">Database Queries</h4>
+              <p class="pattern-desc">Fetch data from SQL databases, NoSQL stores, or data warehouses — like retrieving customer orders or sales data.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+              <div class="pattern-icon" style="background: var(--color-actor-2)">🌐</div>
+              <h4 class="pattern-title">External APIs</h4>
+              <p class="pattern-desc">Call third-party services — weather APIs, stock prices, payment gateways, CRM systems, or booking platforms.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+              <div class="pattern-icon" style="background: var(--color-actor-3)">💻</div>
+              <h4 class="pattern-title">Code Execution</h4>
+              <p class="pattern-desc">Run Python code in a sandbox to perform calculations, generate charts, or process data — like a data analyst.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+              <div class="pattern-icon" style="background: var(--color-actor-4)">🔍</div>
+              <h4 class="pattern-title">Web Search</h4>
+              <p class="pattern-desc">Search the web for up-to-date information — like using Bing or Google to find current news or product reviews.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+              <div class="pattern-icon" style="background: var(--color-actor-5)">📄</div>
+              <h4 class="pattern-title">File Operations</h4>
+              <p class="pattern-desc">Read, write, and search files — PDFs, CSVs, images, or text documents stored locally or in the cloud.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+              <div class="pattern-icon" style="background: var(--color-accent)">✉️</div>
+              <h4 class="pattern-title">Communication</h4>
+              <p class="pattern-desc">Send emails, Slack messages, or SMS notifications — like confirming a booking or alerting a team.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">How tool calling works</h2>
+          <p>
+            When you give an agent a tool, the framework does three things automatically:
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Generate a schema</strong>
+                <p>The framework reads your function and creates a <span class="term" data-definition="A function schema is a JSON description that tells the LLM what a tool does, what parameters it needs, and what types they are. The LLM reads this like a menu to decide which tools to call.">schema</span> — a description of what the tool does and what parameters it needs.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Send schema to LLM</strong>
+                <p>The framework sends the schema (along with the user's message) to the LLM. The LLM decides whether to call the tool.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Execute and return result</strong>
+                <p>If the LLM calls the tool, the framework executes it, gets the result, and sends it back to the LLM for a final response.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-accent">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong class="callout-title">The Framework Saves You Time</strong>
+              <p>Without a framework like MAF, you'd have to manually parse the LLM's response, figure out which function it wants to call, extract the parameters, run the function, and send the result back. MAF does all of that for you automatically.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Real example: Weather tool</h2>
+          <p>
+            Let's build a tool that gets the current weather for a city. Here's how you'd define it:
+          </p>
+
+          <div class="translation-block">
+            <div class="translation-code">
+              <span class="translation-label">CODE</span>
+              <pre><code><span class="code-line"><span class="code-keyword">@tool</span></span>
+<span class="code-line"><span class="code-keyword">def</span> <span class="code-function">get_weather</span>(city: <span class="code-keyword">str</span>) -> <span class="code-keyword">str</span>:</span>
+<span class="code-line">    <span class="code-string">"""Get the current weather for a city."""</span></span>
+<span class="code-line">    <span class="code-comment"># In production, call a real weather API</span></span>
+<span class="code-line">    <span class="code-keyword">return</span> <span class="code-string">f"The weather in {city} is sunny, 72°F."</span></span></code></pre>
+            </div>
+            <div class="translation-english">
+              <span class="translation-label">PLAIN ENGLISH</span>
+              <div class="translation-lines">
+                <p class="tl">Mark this as a tool the agent can call...</p>
+                <p class="tl">Define a function that takes a city name as text and returns weather as text...</p>
+                <p class="tl">This docstring tells the LLM what the tool does...</p>
+                <p class="tl">Comment explaining this is simplified for learning...</p>
+                <p class="tl">Return a formatted weather string (in production, you'd call a real API like OpenWeatherMap).</p>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            When you attach this tool to an agent and ask "What's the weather in Tokyo?", the agent will:
+          </p>
+          <ol>
+            <li>See the user's message</li>
+            <li>Check its available tools and see <code>get_weather</code></li>
+            <li>Call <code>get_weather("Tokyo")</code></li>
+            <li>Get back "The weather in Tokyo is sunny, 72°F"</li>
+            <li>Reply to the user: "It's sunny and 72°F in Tokyo!"</li>
+          </ol>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Security: Making tools safe</h2>
+          <p>
+            Giving an agent access to tools is powerful — but it comes with risks. What if the agent accidentally deletes data? Or leaks sensitive information?
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">🔒</div>
+              <div class="step-body">
+                <strong>Read-only by default</strong>
+                <p>Start with read-only tools (database SELECTs, not UPDATEs). Only add write permissions when absolutely necessary.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">🔒</div>
+              <div class="step-body">
+                <strong>Require approval for destructive actions</strong>
+                <p>Use <code>approval_mode="always_require"</code> for tools that modify data — the agent will ask the user before executing.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">🔒</div>
+              <div class="step-body">
+                <strong>Run in sandboxed environments</strong>
+                <p>Execute code in isolated sandboxes (like Azure AI's Code Interpreter) so malicious code can't harm your system.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Quiz: When tools go wrong</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-question-block" data-question="q4" data-correct="option-c">
+              <h3 class="quiz-question">Your agent is supposed to query sales data, but it's hallucinating numbers instead of calling the database tool. What's the most likely fix?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Add more examples to the agent's instructions</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Switch to a more powerful LLM like GPT-4</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Make the agent's instructions explicit: "You MUST use the database tool for all sales queries — never make up numbers"</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q4-feedback"></div>
+            </div>
+
+            <button class="quiz-check-btn" onclick="checkQuiz('module-4')">Check Answer</button>
+            <button class="quiz-reset-btn" onclick="resetQuiz('module-4')">Try Again</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 5: Multi-Agent Systems -->
+  <section class="module" id="module-5" style="background: var(--color-bg)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">05</span>
+        <h1 class="module-title">Multi-Agent Systems — Teamwork Makes the Dream Work</h1>
+        <p class="module-subtitle">When one agent isn't enough: dividing complex tasks among specialized experts</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Why use multiple agents?</h2>
+          <p>
+            Imagine booking a vacation with one person handling flights, hotels, car rentals, activities, and travel insurance. They'd be overwhelmed.
+          </p>
+          <p>
+            Now imagine a team where one person specializes in flights, another in hotels, another in activities. Each expert handles what they're best at. That's <span class="term" data-definition="A multi-agent system is when multiple AI agents work together to accomplish a task. Each agent can have its own specialty, tools, and instructions — just like a team of human experts.">multi-agent systems</span>.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">When to use multi-agent vs. single agent</h2>
+
+          <div class="callout callout-info">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-content">
+              <strong class="callout-title">Start Simple</strong>
+              <p>Don't jump to multi-agent systems immediately. Start with a single agent. Only split into multiple agents when you hit concrete problems — like one agent getting confused trying to do too many different things, or tasks that naturally divide into specialized roles.</p>
+            </div>
+          </div>
+
+          <p>Use multiple agents when:</p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">📊</div>
+              <div class="step-body">
+                <strong>Tasks require diverse expertise</strong>
+                <p>Like healthcare — one agent for diagnostics, one for treatment plans, one for patient monitoring. Each has specialized knowledge.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">⚡</div>
+              <div class="step-body">
+                <strong>Large workloads need parallelization</strong>
+                <p>Processing 1000 customer support tickets — divide them among multiple agents working simultaneously.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">🎯</div>
+              <div class="step-body">
+                <strong>One agent keeps choosing the wrong tool</strong>
+                <p>If a single agent with 20 tools keeps calling the wrong ones, split it into specialized agents with 3-5 tools each.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Multi-agent patterns</h2>
+
+          <div class="pattern-cards">
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+              <div class="pattern-icon" style="background: var(--color-actor-1)">🔄</div>
+              <h4 class="pattern-title">Sequential Handoff</h4>
+              <p class="pattern-desc">Agent A finishes, then hands the task to Agent B — like an assembly line. Example: Research agent → Writer agent → Editor agent.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+              <div class="pattern-icon" style="background: var(--color-actor-2)">💬</div>
+              <h4 class="pattern-title">Group Chat</h4>
+              <p class="pattern-desc">Multiple agents discuss and collaborate on a single task — like a team brainstorming session. One might suggest ideas, another critiques, another refines.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+              <div class="pattern-icon" style="background: var(--color-actor-3)">🏢</div>
+              <h4 class="pattern-title">Hierarchical</h4>
+              <p class="pattern-desc">A manager agent breaks tasks into subtasks and assigns them to worker agents — like a project manager delegating to a team.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+              <div class="pattern-icon" style="background: var(--color-actor-4)">🤝</div>
+              <h4 class="pattern-title">Collaborative Filtering</h4>
+              <p class="pattern-desc">Multiple expert agents contribute to a recommendation — like asking 3 stock analysts (fundamental, technical, industry) for their input before deciding.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Example: Refund processing system</h2>
+          <p>
+            Let's design a multi-agent system for handling customer refunds. Instead of one overwhelmed agent, we use specialists:
+          </p>
+
+          <div class="icon-rows">
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-1)">👤</div>
+              <div>
+                <strong>Customer Agent</strong>
+                <p>Handles customer communication — asks for order details, explains the refund process</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-2)">🔍</div>
+              <div>
+                <strong>Validation Agent</strong>
+                <p>Checks if the refund request is valid — order exists, within refund window, not already processed</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-3)">💳</div>
+              <div>
+                <strong>Payment Agent</strong>
+                <p>Processes the actual refund through the payment gateway — handles retries if the transaction fails</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-4)">⚖️</div>
+              <div>
+                <strong>Compliance Agent</strong>
+                <p>Ensures the refund follows company policies and regulations — flags suspicious patterns</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-5)">✅</div>
+              <div>
+                <strong>Resolution Agent</strong>
+                <p>Confirms completion, sends confirmation email, updates customer support ticket status</p>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            Each agent has a clear role. They work together sequentially — the customer agent hands off to validation, which hands off to payment, and so on.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">The tradeoff: Complexity vs. Specialization</h2>
+
+          <div class="callout callout-accent">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong class="callout-title">More Agents = More Coordination Overhead</strong>
+              <p>Every agent you add increases complexity. You need to handle communication between agents, manage failures (what if one agent crashes?), and debug interactions. Only use multi-agent when the benefits (specialization, parallelization) outweigh the coordination cost.</p>
+            </div>
+          </div>
+
+          <p>
+            Think of it like a company: a startup with 3 people can move fast because there's minimal coordination overhead. A 100-person company needs managers, processes, and meetings to coordinate. Same with agents.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Quiz: Designing systems</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-question-block" data-question="q5" data-correct="option-b">
+              <h3 class="quiz-question">You're building a system to answer customer support questions. The agent has access to 30 tools (knowledge base search, order lookup, refund API, shipping tracker, etc.) and keeps calling the wrong tools. What's your best next step?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Add more examples to the agent's instructions so it learns which tools to use</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Split into specialized agents — one for orders, one for refunds, one for shipping — each with 5-10 relevant tools</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Remove half the tools to simplify the agent's decision-making</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q5-feedback"></div>
+            </div>
+
+            <button class="quiz-check-btn" onclick="checkQuiz('module-5')">Check Answer</button>
+            <button class="quiz-reset-btn" onclick="resetQuiz('module-5')">Try Again</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 6: Production with Microsoft Agent Framework -->
+  <section class="module" id="module-6" style="background: var(--color-bg-warm)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">06</span>
+        <h1 class="module-title">Building Production-Ready Agents with Microsoft Agent Framework</h1>
+        <p class="module-subtitle">Everything you need to deploy reliable, observable, and scalable AI agents</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">From prototype to production</h2>
+          <p>
+            You've built agents. You've seen them work in notebooks. But deploying to production is different — you need monitoring, error handling, security, and scalability.
+          </p>
+          <p>
+            That's where <span class="term" data-definition="Microsoft Agent Framework (MAF) is an open-source framework for building production-ready AI agents. It provides observability, durability, security controls, and multi-agent orchestration patterns out of the box.">Microsoft Agent Framework (MAF)</span> shines. It's designed for enterprise production systems, not just demos.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">What makes MAF production-ready?</h2>
+
+          <div class="pattern-cards">
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+              <div class="pattern-icon" style="background: var(--color-actor-1)">📊</div>
+              <h4 class="pattern-title">Observability</h4>
+              <p class="pattern-desc">Built-in <span class="term" data-definition="OpenTelemetry is an industry-standard framework for collecting traces, metrics, and logs from your applications. It lets you see exactly what your agents are doing in production.">OpenTelemetry</span> integration — every tool call, reasoning step, and error is traced. You can see exactly what went wrong.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+              <div class="pattern-icon" style="background: var(--color-actor-2)">🔒</div>
+              <h4 class="pattern-title">Security</h4>
+              <p class="pattern-desc">Role-based access control, private data handling, content safety filters — all managed through Azure AI Foundry.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+              <div class="pattern-icon" style="background: var(--color-actor-3)">💾</div>
+              <h4 class="pattern-title">Durability</h4>
+              <p class="pattern-desc">Agents can pause, resume, and recover from errors. Long-running workflows won't lose progress if a server restarts.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+              <div class="pattern-icon" style="background: var(--color-actor-4)">🎛️</div>
+              <h4 class="pattern-title">Control</h4>
+              <p class="pattern-desc"><span class="term" data-definition="Human-in-the-loop means the agent pauses to ask a human for approval before taking certain actions — like confirming a $10,000 purchase before executing it.">Human-in-the-loop</span> workflows — agents ask for approval before executing critical actions.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+              <div class="pattern-icon" style="background: var(--color-actor-5)">⚡</div>
+              <h4 class="pattern-title">Multi-Agent Orchestration</h4>
+              <p class="pattern-desc">Built-in patterns for sequential, concurrent, group chat, and hierarchical agent coordination.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+              <div class="pattern-icon" style="background: var(--color-accent)">🌐</div>
+              <h4 class="pattern-title">Cloud-Agnostic</h4>
+              <p class="pattern-desc">Run agents in containers, on-prem, or across multiple clouds — not locked into Azure.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Key MAF concepts</h2>
+
+          <div class="icon-rows">
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-1)">🧵</div>
+              <div>
+                <strong>Threads</strong>
+                <p><span class="term" data-definition="A thread in MAF is a persistent conversation history. It stores all messages between the user and agent across multiple turns. You can serialize threads to save them to a database and resume later.">Threads</span> store conversation history across turns — serialize them to a database to resume conversations days later.</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-2)">🔀</div>
+              <div>
+                <strong>Workflows</strong>
+                <p>Pre-defined multi-step processes where agents are components — like a flowchart with conditional branches and parallel execution.</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-3)">🔌</div>
+              <div>
+                <strong>Middleware</strong>
+                <p>Hooks that run before/after tool calls or LLM requests — useful for logging, authentication, or rate limiting.</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-4)">🧠</div>
+              <div>
+                <strong>Memory Providers</strong>
+                <p>Plug in external memory services like <span class="term" data-definition="Mem0 is a service that provides persistent, long-term memory for AI agents. It remembers user preferences and context across sessions — like how Netflix remembers what you like to watch.">Mem0</span> to give agents long-term memory of user preferences.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Observability example</h2>
+          <p>
+            MAF automatically traces every action. Here's what you see in production when an agent runs:
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Trace ID: abc123</strong>
+                <p>User message received: "Book a flight to Paris"</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Span: LLM Request</strong>
+                <p>Sent 1 message to gpt-4o | Tokens used: 150 | Latency: 1.2s</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Span: Tool Execution</strong>
+                <p>Called search_flights("Paris") | Result: 5 flights found | Latency: 0.8s</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Span: LLM Request</strong>
+                <p>Sent 2 messages (with tool result) to gpt-4o | Tokens used: 320 | Latency: 1.5s</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Complete</strong>
+                <p>Agent response: "I found 5 flights to Paris. Here are the top 3 options..." | Total time: 3.5s</p>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            Every step is logged. If something breaks, you know exactly where and why.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Your journey from here</h2>
+          <p>
+            You've learned the fundamentals:
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>What AI Agents are</strong>
+                <p>Systems that use LLMs to take actions in the real world using tools</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>How to build your first agent</strong>
+                <p>Using MAF to connect to Azure AI Foundry and define tools</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>Design patterns</strong>
+                <p>Tool Use, Agentic RAG, Planning, Multi-Agent, and Metacognition</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>Giving agents superpowers with tools</strong>
+                <p>Database queries, APIs, code execution, web search, and more</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>When to use multiple agents</strong>
+                <p>Dividing complex tasks among specialists for better results</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>Production deployment with MAF</strong>
+                <p>Observability, security, durability, and orchestration for enterprise systems</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-accent" style="margin-top: var(--space-12)">
+            <div class="callout-icon">🎓</div>
+            <div class="callout-content">
+              <strong class="callout-title">What's Next?</strong>
+              <p>This course covered the essentials to get you started. To go deeper, explore the full <a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" style="color: var(--color-accent); text-decoration: underline;">AI Agents for Beginners</a> repository on GitHub — it has 15+ lessons, Jupyter notebooks with runnable code, and advanced topics like RAG, planning patterns, metacognition, agentic protocols (MCP, A2A), context engineering, and more.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Final quiz: Putting it all together</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-question-block" data-question="q6" data-correct="option-b">
+              <h3 class="quiz-question">You're deploying an agent to production that processes customer refunds. It needs to query a database, call a payment API, and send confirmation emails. What's the most important production consideration?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Use the fastest LLM model to minimize latency</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Add observability (tracing all actions) so you can debug failures in production</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Split into multiple agents — one for database, one for payments, one for emails</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q6-feedback"></div>
+            </div>
+
+            <button class="quiz-check-btn" onclick="checkQuiz('module-6')">Check Answer</button>
+            <button class="quiz-reset-btn" onclick="resetQuiz('module-6')">Try Again</button>
+          </div>
+        </section>
+
+        <section class="screen animate-in" style="text-align: center; padding: var(--space-16) 0;">
+          <h2 class="screen-heading">🎉 Congratulations!</h2>
+          <p style="font-size: var(--text-lg); max-width: 60ch; margin: var(--space-6) auto;">
+            You've completed the AI Agents for Beginners interactive course. You now understand how agents work, how to build them, and how to deploy them to production.
+          </p>
+          <p style="font-size: var(--text-base); max-width: 60ch; margin: var(--space-6) auto; color: var(--color-text-secondary);">
+            This course was generated with <a href="https://github.com/zarazhangrui/codebase-to-course" target="_blank" style="color: var(--color-accent); text-decoration: underline;">codebase-to-course</a>, a skill for turning any codebase into an interactive learning experience.
+          </p>
+        </section>
+      </div>
+    </div>
+  </section>
 
   <script>
     (function() {
@@ -1645,6 +2297,18 @@
         'q3': {
           correct: 'Exactly! The LLM has been trained on vast amounts of travel data, so it "knows" destinations like Paris and Tokyo. Without clear instructions to ALWAYS call the tool, it might decide to answer from its training data instead. To fix this, make the agent\'s instructions more explicit: "You must use the get_destinations tool to find available destinations — never recommend places that aren\'t in the tool\'s list."',
           incorrect: 'Not quite. The @tool decorator is present (otherwise the framework wouldn\'t know the function exists at all). And the docstring is clear enough. The real issue is that the LLM has been trained on travel data, so it "knows" destinations already. It decided it didn\'t need to call the tool. To fix this, make the instructions more strict: "You MUST use get_destinations — never suggest places that aren\'t in the tool\'s result."'
+        },
+        'q4': {
+          correct: 'Exactly! The most common reason agents hallucinate instead of calling tools is that the instructions aren\'t explicit enough. The LLM might have been trained on sales data, so it "knows" some numbers. You need to be very direct: "You MUST use the database tool for all sales queries. Never make up numbers or use your training data." This forces the agent to always call the tool.',
+          incorrect: 'Not quite. Adding more examples or switching models might help slightly, but the root cause is usually the instructions. The LLM has probably been trained on sales data, so it thinks it can answer without the tool. Make the instructions explicit and mandatory: "You MUST use the database tool for all sales queries — never make up numbers."'
+        },
+        'q5': {
+          correct: 'Exactly! When a single agent has too many tools, it gets confused about which one to use — like asking one person to be an expert in 30 different fields. By splitting into specialized agents (Orders Agent with order-related tools, Refunds Agent with refund tools, etc.), each agent has a focused set of 5-10 tools that are all relevant to its domain. This dramatically reduces confusion.',
+          incorrect: 'Not quite. Adding examples or removing tools might help a bit, but the real problem is cognitive overload — 30 tools is too many for one agent to reliably choose from. The best solution is to split into specialized agents (Orders, Refunds, Shipping), each with 5-10 relevant tools. This way each agent has expertise in one domain.'
+        },
+        'q6': {
+          correct: 'Exactly! In production, you need to know what went wrong when things fail. Observability (tracing every tool call, LLM request, and error) lets you debug issues that only happen in production — like "why did this refund fail for this one customer?" Without tracing, you\'re flying blind. MAF provides built-in OpenTelemetry integration for this.',
+          incorrect: 'Not quite. Speed and architecture matter, but the most critical thing for production is observability. When a refund fails at 2am, you need to trace exactly what happened — which tool was called, what the response was, where it broke. Without observability, debugging production issues is nearly impossible. MAF provides built-in OpenTelemetry tracing for this.'
         }
       };
 
