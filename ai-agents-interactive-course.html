@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agents for Beginners - Interactive Course</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== CSS DESIGN SYSTEM ========== */
+    :root {
+      /* Colors */
+      --color-bg:             #FAF7F2;
+      --color-bg-warm:        #F5F0E8;
+      --color-bg-code:        #1E1E2E;
+      --color-text:           #2C2A28;
+      --color-text-secondary: #6B6560;
+      --color-text-muted:     #9E9790;
+      --color-border:         #E5DFD6;
+      --color-border-light:   #EEEBE5;
+      --color-surface:        #FFFFFF;
+      --color-surface-warm:   #FDF9F3;
+
+      /* Accent - teal for tech/AI feel */
+      --color-accent:         #2A7B9B;
+      --color-accent-hover:   #236A87;
+      --color-accent-light:   #E4F2F7;
+      --color-accent-muted:   #5FA3BF;
+
+      /* Semantic */
+      --color-success:        #2D8B55;
+      --color-success-light:  #E8F5EE;
+      --color-error:          #C93B3B;
+      --color-error-light:    #FDE8E8;
+      --color-info:           #2A7B9B;
+      --color-info-light:     #E4F2F7;
+
+      /* Actor colors for diagrams */
+      --color-actor-1:        #2A7B9B;  /* teal - Agent */
+      --color-actor-2:        #D94F30;  /* vermillion - LLM */
+      --color-actor-3:        #D4A843;  /* golden - Tools */
+      --color-actor-4:        #7B6DAA;  /* plum - Environment */
+      --color-actor-5:        #2D8B55;  /* forest - User */
+
+      /* Typography */
+      --font-display:  'Bricolage Grotesque', Georgia, serif;
+      --font-body:     'DM Sans', -apple-system, sans-serif;
+      --font-mono:     'JetBrains Mono', 'Fira Code', monospace;
+
+      --text-xs:   0.75rem;
+      --text-sm:   0.875rem;
+      --text-base: 1rem;
+      --text-lg:   1.125rem;
+      --text-xl:   1.25rem;
+      --text-2xl:  1.5rem;
+      --text-3xl:  1.875rem;
+      --text-4xl:  2.25rem;
+      --text-5xl:  3rem;
+      --text-6xl:  3.75rem;
+
+      --leading-tight:  1.15;
+      --leading-snug:   1.3;
+      --leading-normal: 1.6;
+      --leading-loose:  1.8;
+
+      /* Spacing */
+      --space-1:  0.25rem;
+      --space-2:  0.5rem;
+      --space-3:  0.75rem;
+      --space-4:  1rem;
+      --space-5:  1.25rem;
+      --space-6:  1.5rem;
+      --space-8:  2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+      --space-24: 6rem;
+
+      --content-width:      800px;
+      --content-width-wide: 1000px;
+      --nav-height:         50px;
+      --radius-sm:  8px;
+      --radius-md:  12px;
+      --radius-lg:  16px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --shadow-sm:  0 1px 2px rgba(44, 42, 40, 0.05);
+      --shadow-md:  0 4px 12px rgba(44, 42, 40, 0.08);
+      --shadow-lg:  0 8px 24px rgba(44, 42, 40, 0.1);
+      --shadow-xl:  0 16px 48px rgba(44, 42, 40, 0.12);
+
+      /* Animations */
+      --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --duration-fast:   150ms;
+      --duration-normal: 300ms;
+      --duration-slow:   500ms;
+      --stagger-delay:   120ms;
+    }
+
+    /* ========== GLOBAL STYLES ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-snap-type: y proximity;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-normal);
+      color: var(--color-text);
+      background: var(--color-bg);
+      background-image: radial-gradient(ellipse at 20% 50%, rgba(42, 123, 155, 0.03) 0%, transparent 50%);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-border);
+      border-radius: var(--radius-full);
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: rgba(250, 247, 242, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-border-light);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-accent), var(--color-actor-2));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-6);
+    }
+
+    .nav-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-lg);
+      color: var(--color-accent);
+    }
+
+    .nav-dots {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--color-text-muted);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      transition: all var(--duration-fast);
+      position: relative;
+    }
+
+    .nav-dot:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-bg-code);
+      color: #CDD6F4;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-xs);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .nav-dot.current {
+      border-color: var(--color-accent);
+      background: var(--color-accent);
+      box-shadow: 0 0 0 3px var(--color-accent-light);
+    }
+
+    .nav-dot.visited {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+
+    /* ========== MODULE STRUCTURE ========== */
+    .module {
+      min-height: 100dvh;
+      min-height: 100vh;
+      scroll-snap-align: start;
+      padding: var(--space-16) var(--space-6);
+      padding-top: calc(var(--nav-height) + var(--space-12));
+    }
+
+    .module-content {
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+
+    .module-header {
+      margin-bottom: var(--space-12);
+    }
+
+    .module-number {
+      font-family: var(--font-display);
+      font-size: var(--text-6xl);
+      font-weight: 800;
+      color: var(--color-accent);
+      opacity: 0.15;
+      display: block;
+      line-height: 1;
+    }
+
+    .module-title {
+      font-family: var(--font-display);
+      font-size: var(--text-4xl);
+      font-weight: 700;
+      line-height: var(--leading-tight);
+      margin: var(--space-4) 0;
+      color: var(--color-text);
+    }
+
+    .module-subtitle {
+      font-size: var(--text-lg);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-snug);
+    }
+
+    .module-body {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .screen {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .screen-heading {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: var(--leading-snug);
+    }
+
+    .screen p {
+      max-width: 65ch;
+      line-height: var(--leading-normal);
+    }
+
+    /* ========== ANIMATIONS ========== */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity var(--duration-slow) var(--ease-out),
+                  transform var(--duration-slow) var(--ease-out);
+    }
+
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ========== INTERACTIVE ELEMENTS ========== */
+
+    /* Glossary Tooltips */
+    .term {
+      border-bottom: 1.5px dashed var(--color-accent-muted);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .term:hover,
+    .term.active {
+      border-bottom-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .term-tooltip {
+      position: fixed;
+      background: var(--color-bg-code);
+      color: #CDD6F4;
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-sm);
+      font-family: var(--font-body);
+      line-height: var(--leading-normal);
+      width: max(200px, min(320px, 80vw));
+      box-shadow: var(--shadow-lg);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--duration-fast);
+      z-index: 10000;
+    }
+
+    .term-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--color-bg-code);
+    }
+
+    .term-tooltip.visible {
+      opacity: 1;
+    }
+
+    .term-tooltip.flip {
+      bottom: auto;
+      top: calc(100% + 8px);
+    }
+
+    .term-tooltip.flip::after {
+      top: auto;
+      bottom: 100%;
+      border-top-color: transparent;
+      border-bottom-color: var(--color-bg-code);
+    }
+
+    /* Code ↔ English Translation Blocks */
+    .translation-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin: var(--space-8) 0;
+    }
+
+    .translation-code {
+      background: var(--color-bg-code);
+      color: #CDD6F4;
+      padding: var(--space-6);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      line-height: 1.7;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .translation-code pre,
+    .translation-code code {
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-x: hidden;
+    }
+
+    .translation-english {
+      background: var(--color-surface-warm);
+      padding: var(--space-6);
+      font-size: var(--text-sm);
+      line-height: 1.7;
+      border-left: 3px solid var(--color-accent);
+    }
+
+    .translation-label {
+      position: absolute;
+      top: var(--space-2);
+      right: var(--space-3);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+    }
+
+    .translation-english .translation-label {
+      color: var(--color-text-muted);
+    }
+
+    .translation-lines {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .tl {
+      margin: 0;
+    }
+
+    /* Syntax highlighting */
+    .code-keyword  { color: #CBA6F7; }
+    .code-string   { color: #A6E3A1; }
+    .code-function { color: #89B4FA; }
+    .code-comment  { color: #6C7086; }
+    .code-number   { color: #FAB387; }
+    .code-property { color: #F9E2AF; }
+    .code-operator { color: #94E2D5; }
+
+    /* Callout Boxes */
+    .callout {
+      display: flex;
+      gap: var(--space-4);
+      padding: var(--space-6);
+      border-radius: var(--radius-md);
+      margin: var(--space-6) 0;
+    }
+
+    .callout-accent {
+      background: var(--color-accent-light);
+      border-left: 3px solid var(--color-accent);
+    }
+
+    .callout-info {
+      background: var(--color-info-light);
+      border-left: 3px solid var(--color-info);
+    }
+
+    .callout-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .callout-title {
+      display: block;
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+    }
+
+    .callout-content p {
+      margin: 0;
+    }
+
+    /* Pattern Cards */
+    .pattern-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-4);
+      margin: var(--space-6) 0;
+    }
+
+    .pattern-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal);
+    }
+
+    .pattern-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .pattern-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: var(--space-4);
+    }
+
+    .pattern-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-2);
+    }
+
+    .pattern-desc {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-normal);
+    }
+
+    /* Icon Rows */
+    .icon-rows {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      margin: var(--space-6) 0;
+    }
+
+    .icon-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .icon-row p {
+      margin: 0;
+      color: var(--color-text-secondary);
+      font-size: var(--text-sm);
+    }
+
+    .icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    /* Quiz Styles */
+    .quiz-container {
+      margin: var(--space-8) 0;
+    }
+
+    .quiz-question-block {
+      margin-bottom: var(--space-6);
+    }
+
+    .quiz-question {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      background: var(--color-surface);
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: border-color var(--duration-fast), background var(--duration-fast);
+    }
+
+    .quiz-option:hover {
+      border-color: var(--color-accent-muted);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--color-accent);
+      background: var(--color-accent-light);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--color-success);
+      background: var(--color-success-light);
+    }
+
+    .quiz-option.incorrect {
+      border-color: var(--color-error);
+      background: var(--color-error-light);
+    }
+
+    .quiz-option-radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--color-border);
+      transition: all var(--duration-fast);
+      flex-shrink: 0;
+    }
+
+    .quiz-option.selected .quiz-option-radio {
+      border-color: var(--color-accent);
+      background: var(--color-accent);
+      box-shadow: inset 0 0 0 3px white;
+    }
+
+    .quiz-feedback {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height var(--duration-normal), opacity var(--duration-normal);
+    }
+
+    .quiz-feedback.show {
+      max-height: 200px;
+      opacity: 1;
+      padding: var(--space-3);
+      margin-top: var(--space-2);
+      border-radius: var(--radius-sm);
+    }
+
+    .quiz-feedback.success {
+      background: var(--color-success-light);
+      color: var(--color-success);
+    }
+
+    .quiz-feedback.error {
+      background: var(--color-error-light);
+      color: var(--color-error);
+    }
+
+    .quiz-check-btn,
+    .quiz-reset-btn {
+      margin-top: var(--space-4);
+      margin-right: var(--space-3);
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--duration-fast);
+    }
+
+    .quiz-check-btn:hover {
+      background: var(--color-accent-hover);
+    }
+
+    .quiz-reset-btn {
+      background: var(--color-text-muted);
+    }
+
+    .quiz-reset-btn:hover {
+      background: var(--color-text-secondary);
+    }
+
+    /* Step Cards */
+    .step-cards {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin: var(--space-6) 0;
+    }
+
+    .step-card {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-5);
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      border-left: 3px solid var(--color-accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      color: white;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      flex-shrink: 0;
+    }
+
+    .step-body p {
+      margin: var(--space-1) 0 0;
+      color: var(--color-text-secondary);
+      font-size: var(--text-sm);
+    }
+
+    /* Group Chat Animation */
+    .chat-window {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-6);
+      margin: var(--space-8) 0;
+    }
+
+    .chat-messages {
+      min-height: 300px;
+      max-height: 500px;
+      overflow-y: auto;
+      margin-bottom: var(--space-4);
+    }
+
+    .chat-message {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: var(--text-sm);
+      flex-shrink: 0;
+    }
+
+    .chat-bubble {
+      background: var(--color-bg-warm);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      max-width: 70%;
+    }
+
+    .chat-sender {
+      font-weight: 600;
+      font-size: var(--text-sm);
+      display: block;
+      margin-bottom: var(--space-1);
+    }
+
+    .chat-bubble p {
+      margin: 0;
+      font-size: var(--text-sm);
+    }
+
+    .chat-typing {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .chat-typing-dots {
+      display: flex;
+      gap: var(--space-2);
+      background: var(--color-bg-warm);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-text-muted);
+      animation: typingBounce 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    .chat-controls {
+      display: flex;
+      gap: var(--space-3);
+      align-items: center;
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-border-light);
+    }
+
+    .chat-controls button {
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--duration-fast);
+    }
+
+    .chat-controls button:hover {
+      background: var(--color-accent-hover);
+    }
+
+    .chat-progress {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      :root {
+        --text-4xl: 1.875rem;
+        --text-5xl: 2.25rem;
+        --text-6xl: 3rem;
+      }
+
+      .translation-block {
+        grid-template-columns: 1fr;
+      }
+
+      .translation-english {
+        border-left: none;
+        border-top: 3px solid var(--color-accent);
+      }
+
+      .pattern-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-title {
+        font-size: var(--text-base);
+      }
+
+      .nav-dots {
+        gap: var(--space-2);
+      }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --text-4xl: 1.5rem;
+        --text-5xl: 1.875rem;
+        --text-6xl: 2.25rem;
+      }
+
+      .module {
+        padding: var(--space-8) var(--space-4);
+      }
+
+      .pattern-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="progress-bar" id="progress-bar"></div>
+    <div class="nav-inner">
+      <span class="nav-title">AI Agents for Beginners</span>
+      <div class="nav-dots">
+        <button class="nav-dot current" data-target="module-1" data-tooltip="What Are AI Agents?" onclick="scrollToModule('module-1')"></button>
+        <button class="nav-dot" data-target="module-2" data-tooltip="Your First AI Agent" onclick="scrollToModule('module-2')"></button>
+        <button class="nav-dot" data-target="module-3" data-tooltip="Design Patterns" onclick="scrollToModule('module-3')"></button>
+        <button class="nav-dot" data-target="module-4" data-tooltip="Tool Use" onclick="scrollToModule('module-4')"></button>
+        <button class="nav-dot" data-target="module-5" data-tooltip="Multi-Agent Systems" onclick="scrollToModule('module-5')"></button>
+        <button class="nav-dot" data-target="module-6" data-tooltip="Production with MAF" onclick="scrollToModule('module-6')"></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Module 1: What Are AI Agents? -->
+  <section class="module" id="module-1" style="background: var(--color-bg)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">01</span>
+        <h1 class="module-title">What Are AI Agents?</h1>
+        <p class="module-subtitle">Understanding the building blocks that make AI systems act autonomously in the real world</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Imagine you're booking a vacation...</h2>
+          <p>
+            You tell an app: "Find me a warm beach destination for next week." Within seconds, it checks flight prices, compares hotel availability, reads reviews, books your tickets, and sends you a confirmation email.
+          </p>
+          <p>
+            You didn't click through 20 websites. You didn't manually check calendars. You just asked — and it <em>acted</em>.
+          </p>
+          <p>
+            That's what an <span class="term" data-definition="An AI Agent is a system that uses a Large Language Model (LLM) as its reasoning engine to autonomously perform actions in the real world — like calling APIs, querying databases, or running code — to accomplish goals on behalf of a user.">AI Agent</span> does. It doesn't just generate text. It <strong>takes actions</strong>.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">What makes something an AI Agent?</h2>
+          <p>
+            AI Agents are <strong>systems</strong> that enable <span class="term" data-definition="A Large Language Model (LLM) is an AI model trained on vast amounts of text that can understand and generate human language. Examples include GPT-4, Claude, and Llama. Think of it as a brain that can read, reason, and write — but it can't DO anything on its own until you give it tools.">Large Language Models (LLMs)</span> to <strong>perform actions</strong> by giving them access to <strong>tools</strong> and <strong>knowledge</strong>.
+          </p>
+
+          <div class="icon-rows">
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-4)">🌍</div>
+              <div>
+                <strong>Environment</strong>
+                <p>The defined space where the agent operates — like a travel booking system, a database, or a web browser</p>
+              </div>
+            </div>
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-2)">📡</div>
+              <div>
+                <strong>Sensors</strong>
+                <p>How the agent gathers information from its environment — API responses, database queries, file contents</p>
+              </div>
+            </div>
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-3)">⚙️</div>
+              <div>
+                <strong>Actuators</strong>
+                <p>How the agent changes the environment — booking a room, sending an email, updating a database</p>
+              </div>
+            </div>
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-1)">🧠</div>
+              <div>
+                <strong>The LLM Brain</strong>
+                <p>The reasoning engine that interprets information and decides which actions to take</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">The key difference: AI Agents ACT</h2>
+          <p>
+            Outside of agent systems, <span class="term" data-definition="LLMs (Large Language Models) are powerful text-understanding AI models, but on their own they can only read and write — they can't book flights, query databases, or send emails. That's where agents come in.">LLMs</span> are limited to generating content based on your prompt. They can explain how to book a flight, but they can't actually book one.
+          </p>
+          <p>
+            Inside agent systems, LLMs can <strong>accomplish tasks</strong> by using tools available in their environment — like calling a booking API, running code, or searching the web.
+          </p>
+
+          <div class="callout callout-accent">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong class="callout-title">Key Insight</strong>
+              <p>The difference between an LLM and an AI Agent is like the difference between a smart friend who gives advice and a personal assistant who actually does the work for you.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Types of AI Agents</h2>
+          <p>
+            Not all agents are created equal. Here are the main types you'll encounter when building agentic systems:
+          </p>
+
+          <div class="pattern-cards">
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+              <div class="pattern-icon" style="background: var(--color-actor-1)">⚡</div>
+              <h4 class="pattern-title">Simple Reflex</h4>
+              <p class="pattern-desc">Acts on predefined rules — like an email filter that auto-forwards complaints to customer service.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+              <div class="pattern-icon" style="background: var(--color-actor-2)">🎯</div>
+              <h4 class="pattern-title">Goal-Based</h4>
+              <p class="pattern-desc">Creates plans to achieve goals — like figuring out the best route from your house to the airport (car → train → flight).</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+              <div class="pattern-icon" style="background: var(--color-actor-3)">⚖️</div>
+              <h4 class="pattern-title">Utility-Based</h4>
+              <p class="pattern-desc">Weighs tradeoffs to maximize value — balancing convenience vs. cost when booking travel.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+              <div class="pattern-icon" style="background: var(--color-actor-4)">📚</div>
+              <h4 class="pattern-title">Learning Agents</h4>
+              <p class="pattern-desc">Improves over time using feedback — like adjusting future bookings based on post-trip surveys.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+              <div class="pattern-icon" style="background: var(--color-actor-5)">🏢</div>
+              <h4 class="pattern-title">Hierarchical</h4>
+              <p class="pattern-desc">Multiple agents in tiers — a manager agent breaks tasks into subtasks for worker agents to complete.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+              <div class="pattern-icon" style="background: var(--color-accent)">🤝</div>
+              <h4 class="pattern-title">Multi-Agent</h4>
+              <p class="pattern-desc">Agents work together cooperatively or competitively — one books flights, another books hotels.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">When should you use AI Agents?</h2>
+          <p>
+            Not every problem needs an agent. Here's when agents shine:
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Open-Ended Problems</strong>
+                <p>Tasks where the steps can't be hardcoded — the <span class="term" data-definition="An LLM (Large Language Model) is the AI brain that powers agents. It reads information, reasons about what to do next, and decides which tools to use. Without an LLM, an agent would just be a fixed script.">LLM</span> needs to figure out what to do dynamically.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Multi-Step Processes</strong>
+                <p>Tasks requiring complexity — using tools and information over multiple turns, not just one-shot retrieval.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Improvement Over Time</strong>
+                <p>Tasks where the agent can learn from feedback (from the environment or users) to provide better results.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Quiz: Test your understanding</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-question-block" data-question="q1" data-correct="option-b">
+              <h3 class="quiz-question">You're building an app that summarizes long PDFs. Do you need an AI Agent or just an LLM?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>An AI Agent — it's complex and multi-step</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Just an LLM — you're only generating text, not taking actions</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Neither — this should be hardcoded</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q1-feedback"></div>
+            </div>
+
+            <div class="quiz-question-block" data-question="q2" data-correct="option-c">
+              <h3 class="quiz-question">A user reports that your travel agent booked a hotel 50 miles from the airport. Where would you look first to debug?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The LLM model — maybe it's hallucinating hotel locations</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The environment — the booking system might have bad data</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The agent's instructions — it might not be prioritizing proximity to the airport</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q2-feedback"></div>
+            </div>
+
+            <button class="quiz-check-btn" onclick="checkQuiz('module-1')">Check Answers</button>
+            <button class="quiz-reset-btn" onclick="resetQuiz('module-1')">Try Again</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 2: Your First AI Agent in Action -->
+  <section class="module" id="module-2" style="background: var(--color-bg-warm)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">02</span>
+        <h1 class="module-title">Your First AI Agent in Action</h1>
+        <p class="module-subtitle">Tracing what happens when you ask an agent to recommend a vacation destination</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">You type: "Find me a warm beach destination"</h2>
+          <p>
+            Before we dive into building complex agents, let's trace what actually happens under the hood when you run a simple travel agent. This will ground everything in something concrete — you'll see the exact journey your request takes through the system.
+          </p>
+          <p>
+            We'll use the <span class="term" data-definition="Microsoft Agent Framework (MAF) is an open-source framework for building production-ready AI agents. It handles the complex back-and-forth between LLMs and tools so you don't have to write that logic yourself.">Microsoft Agent Framework</span> (MAF) — Microsoft's framework for building agents with <span class="term" data-definition="Azure AI Foundry is Microsoft's cloud platform for deploying and managing AI models and agents. It provides enterprise-grade security, scalability, and observability for production AI systems.">Azure AI Foundry</span>.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Step 1: Creating the agent</h2>
+          <p>
+            First, we define what the agent knows how to do. In this case, we give it a <strong>tool</strong> — a Python function that returns a list of destinations.
+          </p>
+
+          <div class="translation-block">
+            <div class="translation-code">
+              <span class="translation-label">CODE</span>
+              <pre><code><span class="code-line"><span class="code-keyword">@tool</span>(approval_mode=<span class="code-string">"never_require"</span>)</span>
+<span class="code-line"><span class="code-keyword">def</span> <span class="code-function">get_destinations</span>() -> list[str]:</span>
+<span class="code-line">    <span class="code-string">"""Get a list of popular vacation destinations."""</span></span>
+<span class="code-line">    <span class="code-keyword">return</span> [</span>
+<span class="code-line">        <span class="code-string">"Barcelona"</span>, <span class="code-string">"Paris"</span>, <span class="code-string">"Tokyo"</span>,</span>
+<span class="code-line">        <span class="code-string">"Bali"</span>, <span class="code-string">"Sydney"</span></span>
+<span class="code-line">    ]</span></code></pre>
+            </div>
+            <div class="translation-english">
+              <span class="translation-label">PLAIN ENGLISH</span>
+              <div class="translation-lines">
+                <p class="tl">Mark this function as a tool the agent can call...</p>
+                <p class="tl">Define a function called get_destinations that returns a list of text strings...</p>
+                <p class="tl">This docstring explains what the tool does — the LLM reads this to know when to call it...</p>
+                <p class="tl">Send back the list of destinations...</p>
+                <p class="tl">Five popular destinations to choose from...</p>
+                <p class="tl">Close the list.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-info">
+            <div class="callout-icon">ℹ️</div>
+            <div class="callout-content">
+              <strong class="callout-title">The @tool decorator</strong>
+              <p>That <code>@tool</code> line is magic — it tells MAF "this function is now a tool the agent can call." The framework automatically converts your function into a <span class="term" data-definition="A function schema is a JSON description of a function that tells the LLM what the function does, what parameters it needs, and what it returns. Think of it as a menu the LLM reads to decide which tools to use.">function schema</span> the LLM can understand.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Step 2: Connecting to Azure AI Foundry</h2>
+          <p>
+            Next, we create an <span class="term" data-definition="A provider in MAF is the bridge between your code and the AI service (like Azure OpenAI or OpenAI). It handles authentication, model selection, and sending requests to the cloud.">agent provider</span> that connects to <span class="term" data-definition="Azure AI Foundry is Microsoft's managed service for deploying LLMs and AI agents in the cloud. It provides enterprise security, monitoring, and scalability that you'd otherwise have to build yourself.">Azure AI Foundry</span>. Think of this as plugging your agent into the cloud.
+          </p>
+
+          <div class="translation-block">
+            <div class="translation-code">
+              <span class="translation-label">CODE</span>
+              <pre><code><span class="code-line"><span class="code-keyword">from</span> agent_framework.azure <span class="code-keyword">import</span> AzureAIProjectAgentProvider</span>
+<span class="code-line"><span class="code-keyword">from</span> azure.identity <span class="code-keyword">import</span> AzureCliCredential</span>
+<span class="code-line"></span>
+<span class="code-line">provider = AzureAIProjectAgentProvider(</span>
+<span class="code-line">    credential=AzureCliCredential()</span>
+<span class="code-line">)</span></code></pre>
+            </div>
+            <div class="translation-english">
+              <span class="translation-label">PLAIN ENGLISH</span>
+              <div class="translation-lines">
+                <p class="tl">Import the Azure AI provider class from MAF...</p>
+                <p class="tl">Import Azure authentication — uses your Azure CLI login...</p>
+                <p class="tl"></p>
+                <p class="tl">Create a provider that connects to Azure AI Foundry...</p>
+                <p class="tl">Use your Azure CLI credentials to authenticate (no API keys needed!)...</p>
+                <p class="tl">Store this provider for later use.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Step 3: Creating and running the agent</h2>
+          <p>
+            Now we create the agent, give it instructions (its "personality"), attach the tool, and run it with a user message.
+          </p>
+
+          <div class="translation-block">
+            <div class="translation-code">
+              <span class="translation-label">CODE</span>
+              <pre><code><span class="code-line">agent = <span class="code-keyword">await</span> provider.create_agent(</span>
+<span class="code-line">    tools=[get_destinations],</span>
+<span class="code-line">    name=<span class="code-string">"TravelAgent"</span>,</span>
+<span class="code-line">    instructions=<span class="code-string">"You are a helpful travel agent."</span></span>
+<span class="code-line">)</span>
+<span class="code-line"></span>
+<span class="code-line">response = <span class="code-keyword">await</span> agent.run(</span>
+<span class="code-line">    <span class="code-string">"Find me a warm beach destination"</span></span>
+<span class="code-line">)</span>
+<span class="code-line"><span class="code-function">print</span>(response)</span></code></pre>
+            </div>
+            <div class="translation-english">
+              <span class="translation-label">PLAIN ENGLISH</span>
+              <div class="translation-lines">
+                <p class="tl">Create an agent using our Azure provider...</p>
+                <p class="tl">Give it access to the get_destinations tool we defined earlier...</p>
+                <p class="tl">Name it TravelAgent (useful for debugging)...</p>
+                <p class="tl">These instructions tell the LLM how to behave — like a system prompt...</p>
+                <p class="tl">Store the agent for running.</p>
+                <p class="tl"></p>
+                <p class="tl">Run the agent with the user's message...</p>
+                <p class="tl">The user's request...</p>
+                <p class="tl">Wait for the response.</p>
+                <p class="tl">Show the agent's final answer.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">What happens behind the scenes</h2>
+          <p>
+            When you run the agent, here's the conversation happening between the framework, the LLM, and your tool:
+          </p>
+
+          <div class="chat-window">
+            <div class="chat-messages" id="chat-messages-agent-flow">
+              <div class="chat-message" data-msg="0" data-sender="user" style="display:none">
+                <div class="chat-avatar" style="background: var(--color-actor-5)">U</div>
+                <div class="chat-bubble">
+                  <span class="chat-sender" style="color: var(--color-actor-5)">User</span>
+                  <p>"Find me a warm beach destination"</p>
+                </div>
+              </div>
+
+              <div class="chat-message" data-msg="1" data-sender="framework" style="display:none">
+                <div class="chat-avatar" style="background: var(--color-actor-1)">F</div>
+                <div class="chat-bubble">
+                  <span class="chat-sender" style="color: var(--color-actor-1)">Framework</span>
+                  <p>Sending user message + tool schema to the LLM...</p>
+                </div>
+              </div>
+
+              <div class="chat-message" data-msg="2" data-sender="llm" style="display:none">
+                <div class="chat-avatar" style="background: var(--color-actor-2)">L</div>
+                <div class="chat-bubble">
+                  <span class="chat-sender" style="color: var(--color-actor-2)">LLM</span>
+                  <p>I need more info. Let me call the get_destinations tool to see what's available.</p>
+                </div>
+              </div>
+
+              <div class="chat-message" data-msg="3" data-sender="framework" style="display:none">
+                <div class="chat-avatar" style="background: var(--color-actor-1)">F</div>
+                <div class="chat-bubble">
+                  <span class="chat-sender" style="color: var(--color-actor-1)">Framework</span>
+                  <p>Executing get_destinations()...</p>
+                </div>
+              </div>
+
+              <div class="chat-message" data-msg="4" data-sender="tool" style="display:none">
+                <div class="chat-avatar" style="background: var(--color-actor-3)">T</div>
+                <div class="chat-bubble">
+                  <span class="chat-sender" style="color: var(--color-actor-3)">Tool</span>
+                  <p>["Barcelona", "Paris", "Tokyo", "Bali", "Sydney"]</p>
+                </div>
+              </div>
+
+              <div class="chat-message" data-msg="5" data-sender="framework" style="display:none">
+                <div class="chat-avatar" style="background: var(--color-actor-1)">F</div>
+                <div class="chat-bubble">
+                  <span class="chat-sender" style="color: var(--color-actor-1)">Framework</span>
+                  <p>Sending tool result back to LLM...</p>
+                </div>
+              </div>
+
+              <div class="chat-message" data-msg="6" data-sender="llm" style="display:none">
+                <div class="chat-avatar" style="background: var(--color-actor-2)">L</div>
+                <div class="chat-bubble">
+                  <span class="chat-sender" style="color: var(--color-actor-2)">LLM</span>
+                  <p>Based on the list, I recommend Bali or Sydney — both are warm beach destinations!</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-typing" id="chat-typing-agent-flow" style="display:none">
+              <div class="chat-avatar" id="typing-avatar-agent-flow">?</div>
+              <div class="chat-typing-dots">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+              </div>
+            </div>
+
+            <div class="chat-controls">
+              <button onclick="playChatNext('agent-flow')">Next Message</button>
+              <button onclick="playChatAll('agent-flow')">Play All</button>
+              <button onclick="resetChat('agent-flow')">Replay</button>
+              <span class="chat-progress" id="chat-progress-agent-flow">0 / 7 messages</span>
+            </div>
+          </div>
+
+          <div class="callout callout-accent">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong class="callout-title">The Framework Does the Heavy Lifting</strong>
+              <p>Notice you didn't have to write any code to parse the LLM's response, execute the tool, or send the result back. MAF handles all of that automatically. This is the power of using a framework instead of calling the LLM API directly.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Quiz: Trace the flow</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-question-block" data-question="q3" data-correct="option-b">
+              <h3 class="quiz-question">The LLM returns a recommendation without calling get_destinations. What went wrong?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The @tool decorator is missing — the LLM doesn't know the function exists</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The LLM decided it already knows destinations — it's hallucinating</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The tool's docstring is too vague — the LLM doesn't know when to call it</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q3-feedback"></div>
+            </div>
+
+            <button class="quiz-check-btn" onclick="checkQuiz('module-2')">Check Answer</button>
+            <button class="quiz-reset-btn" onclick="resetQuiz('module-2')">Try Again</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Additional modules will be added here... -->
+  <section class="module" id="module-3" style="background: var(--color-bg)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">03</span>
+        <h1 class="module-title">Agent Design Patterns</h1>
+        <p class="module-subtitle">Common architectural approaches for building agents that solve real-world problems</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Patterns help you build faster</h2>
+          <p>
+            You've seen a basic agent. But what happens when tasks get more complex? Instead of reinventing the wheel, developers use proven <span class="term" data-definition="Design patterns are reusable architectural solutions to common problems. In AI agents, patterns describe different ways to structure agent behavior — like having multiple agents collaborate, or having one agent break tasks into steps.">design patterns</span> — blueprints for structuring agent behavior.
+          </p>
+          <p>
+            These patterns emerged from real production systems. They're not academic theory — they're battle-tested approaches that solve specific problems you'll encounter when building agents.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">The main patterns you'll use</h2>
+
+          <div class="pattern-cards">
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+              <div class="pattern-icon" style="background: var(--color-actor-1)">🔧</div>
+              <h4 class="pattern-title">Tool Use</h4>
+              <p class="pattern-desc">Giving agents access to external capabilities — APIs, databases, code execution. The foundation of all agentic systems.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+              <div class="pattern-icon" style="background: var(--color-actor-2)">🔄</div>
+              <h4 class="pattern-title">Agentic RAG</h4>
+              <p class="pattern-desc">Agents that decide when and how to retrieve information from knowledge bases — instead of blindly retrieving every time.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+              <div class="pattern-icon" style="background: var(--color-actor-3)">📋</div>
+              <h4 class="pattern-title">Planning</h4>
+              <p class="pattern-desc">Breaking complex goals into subtasks — like a project manager decomposing "book a vacation" into flights + hotel + car rental.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+              <div class="pattern-icon" style="background: var(--color-actor-4)">🤝</div>
+              <h4 class="pattern-title">Multi-Agent</h4>
+              <p class="pattern-desc">Multiple specialized agents working together — one agent books flights, another books hotels, they coordinate to complete the trip.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+              <div class="pattern-icon" style="background: var(--color-actor-5)">🧠</div>
+              <h4 class="pattern-title">Metacognition</h4>
+              <p class="pattern-desc">Agents that reflect on their own reasoning — like a writer who reviews their draft and decides if it needs more work.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">When to use which pattern</h2>
+          <p>
+            Choosing the right pattern depends on your problem. Here's a decision tree based on real use cases:
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">?</div>
+              <div class="step-body">
+                <strong>Does the agent need to access external data or APIs?</strong>
+                <p>→ Use <strong>Tool Use</strong>. This is the foundation — almost all agents use tools.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">?</div>
+              <div class="step-body">
+                <strong>Does it need to search through large amounts of documents?</strong>
+                <p>→ Use <strong>Agentic RAG</strong>. The agent decides which documents to retrieve and when.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">?</div>
+              <div class="step-body">
+                <strong>Is the task multi-step and requires sequential decision-making?</strong>
+                <p>→ Use <strong>Planning</strong>. The agent creates a plan and executes it step-by-step.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">?</div>
+              <div class="step-body">
+                <strong>Can the task be divided among specialized experts?</strong>
+                <p>→ Use <strong>Multi-Agent</strong>. Each agent handles what it's best at.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">?</div>
+              <div class="step-body">
+                <strong>Does the agent need to evaluate its own output quality?</strong>
+                <p>→ Use <strong>Metacognition</strong>. The agent reviews and refines its work.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Patterns often combine</h2>
+          <p>
+            In production systems, you rarely use just one pattern. A complex agent might use <strong>Tool Use</strong> to access data, <strong>Planning</strong> to break down tasks, and <strong>Multi-Agent</strong> to divide work among specialists.
+          </p>
+
+          <div class="callout callout-accent">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong class="callout-title">Start Simple, Add Complexity</strong>
+              <p>Don't start with multi-agent systems. Build a single-agent system with Tool Use first. Only add Planning or Multi-Agent when you have a concrete reason — like tasks that require multiple sequential steps, or specialized expertise that's hard to fit in one agent.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 4: Tool Use - Giving Agents Superpowers -->
+  <section class="module" id="module-4" style="background: var(--color-bg-warm)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">04</span>
+        <h1 class="module-title">Tool Use — Giving Agents Superpowers</h1>
+        <p class="module-subtitle">How agents go from chatbots to systems that actually DO things</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Tools are where the magic happens</h2>
+          <p>
+            You've seen an agent call a simple <code>get_destinations</code> function. But tools can be so much more — they're how agents interact with the real world.
+          </p>
+          <p>
+            A <span class="term" data-definition="A tool is a function the agent can call to perform an action or retrieve information. Tools can be anything from simple Python functions to API calls, database queries, or even code execution environments.">tool</span> can be anything: a database query, an API call, a code interpreter, a web search. Agents without tools are just chatbots. Agents <em>with</em> tools can book flights, analyze data, send emails, and automate workflows.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">What kinds of tools can agents use?</h2>
+
+          <div class="pattern-cards">
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+              <div class="pattern-icon" style="background: var(--color-actor-1)">🗄️</div>
+              <h4 class="pattern-title">Database Queries</h4>
+              <p class="pattern-desc">Fetch data from SQL databases, NoSQL stores, or data warehouses — like retrieving customer orders or sales data.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+              <div class="pattern-icon" style="background: var(--color-actor-2)">🌐</div>
+              <h4 class="pattern-title">External APIs</h4>
+              <p class="pattern-desc">Call third-party services — weather APIs, stock prices, payment gateways, CRM systems, or booking platforms.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+              <div class="pattern-icon" style="background: var(--color-actor-3)">💻</div>
+              <h4 class="pattern-title">Code Execution</h4>
+              <p class="pattern-desc">Run Python code in a sandbox to perform calculations, generate charts, or process data — like a data analyst.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+              <div class="pattern-icon" style="background: var(--color-actor-4)">🔍</div>
+              <h4 class="pattern-title">Web Search</h4>
+              <p class="pattern-desc">Search the web for up-to-date information — like using Bing or Google to find current news or product reviews.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+              <div class="pattern-icon" style="background: var(--color-actor-5)">📄</div>
+              <h4 class="pattern-title">File Operations</h4>
+              <p class="pattern-desc">Read, write, and search files — PDFs, CSVs, images, or text documents stored locally or in the cloud.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+              <div class="pattern-icon" style="background: var(--color-accent)">✉️</div>
+              <h4 class="pattern-title">Communication</h4>
+              <p class="pattern-desc">Send emails, Slack messages, or SMS notifications — like confirming a booking or alerting a team.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">How tool calling works</h2>
+          <p>
+            When you give an agent a tool, the framework does three things automatically:
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Generate a schema</strong>
+                <p>The framework reads your function and creates a <span class="term" data-definition="A function schema is a JSON description that tells the LLM what a tool does, what parameters it needs, and what types they are. The LLM reads this like a menu to decide which tools to call.">schema</span> — a description of what the tool does and what parameters it needs.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Send schema to LLM</strong>
+                <p>The framework sends the schema (along with the user's message) to the LLM. The LLM decides whether to call the tool.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Execute and return result</strong>
+                <p>If the LLM calls the tool, the framework executes it, gets the result, and sends it back to the LLM for a final response.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-accent">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong class="callout-title">The Framework Saves You Time</strong>
+              <p>Without a framework like MAF, you'd have to manually parse the LLM's response, figure out which function it wants to call, extract the parameters, run the function, and send the result back. MAF does all of that for you automatically.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Real example: Weather tool</h2>
+          <p>
+            Let's build a tool that gets the current weather for a city. Here's how you'd define it:
+          </p>
+
+          <div class="translation-block">
+            <div class="translation-code">
+              <span class="translation-label">CODE</span>
+              <pre><code><span class="code-line"><span class="code-keyword">@tool</span></span>
+<span class="code-line"><span class="code-keyword">def</span> <span class="code-function">get_weather</span>(city: <span class="code-keyword">str</span>) -> <span class="code-keyword">str</span>:</span>
+<span class="code-line">    <span class="code-string">"""Get the current weather for a city."""</span></span>
+<span class="code-line">    <span class="code-comment"># In production, call a real weather API</span></span>
+<span class="code-line">    <span class="code-keyword">return</span> <span class="code-string">f"The weather in {city} is sunny, 72°F."</span></span></code></pre>
+            </div>
+            <div class="translation-english">
+              <span class="translation-label">PLAIN ENGLISH</span>
+              <div class="translation-lines">
+                <p class="tl">Mark this as a tool the agent can call...</p>
+                <p class="tl">Define a function that takes a city name as text and returns weather as text...</p>
+                <p class="tl">This docstring tells the LLM what the tool does...</p>
+                <p class="tl">Comment explaining this is simplified for learning...</p>
+                <p class="tl">Return a formatted weather string (in production, you'd call a real API like OpenWeatherMap).</p>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            When you attach this tool to an agent and ask "What's the weather in Tokyo?", the agent will:
+          </p>
+          <ol>
+            <li>See the user's message</li>
+            <li>Check its available tools and see <code>get_weather</code></li>
+            <li>Call <code>get_weather("Tokyo")</code></li>
+            <li>Get back "The weather in Tokyo is sunny, 72°F"</li>
+            <li>Reply to the user: "It's sunny and 72°F in Tokyo!"</li>
+          </ol>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Security: Making tools safe</h2>
+          <p>
+            Giving an agent access to tools is powerful — but it comes with risks. What if the agent accidentally deletes data? Or leaks sensitive information?
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">🔒</div>
+              <div class="step-body">
+                <strong>Read-only by default</strong>
+                <p>Start with read-only tools (database SELECTs, not UPDATEs). Only add write permissions when absolutely necessary.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">🔒</div>
+              <div class="step-body">
+                <strong>Require approval for destructive actions</strong>
+                <p>Use <code>approval_mode="always_require"</code> for tools that modify data — the agent will ask the user before executing.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">🔒</div>
+              <div class="step-body">
+                <strong>Run in sandboxed environments</strong>
+                <p>Execute code in isolated sandboxes (like Azure AI's Code Interpreter) so malicious code can't harm your system.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Quiz: When tools go wrong</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-question-block" data-question="q4" data-correct="option-c">
+              <h3 class="quiz-question">Your agent is supposed to query sales data, but it's hallucinating numbers instead of calling the database tool. What's the most likely fix?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Add more examples to the agent's instructions</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Switch to a more powerful LLM like GPT-4</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Make the agent's instructions explicit: "You MUST use the database tool for all sales queries — never make up numbers"</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q4-feedback"></div>
+            </div>
+
+            <button class="quiz-check-btn" onclick="checkQuiz('module-4')">Check Answer</button>
+            <button class="quiz-reset-btn" onclick="resetQuiz('module-4')">Try Again</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 5: Multi-Agent Systems -->
+  <section class="module" id="module-5" style="background: var(--color-bg)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">05</span>
+        <h1 class="module-title">Multi-Agent Systems — Teamwork Makes the Dream Work</h1>
+        <p class="module-subtitle">When one agent isn't enough: dividing complex tasks among specialized experts</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Why use multiple agents?</h2>
+          <p>
+            Imagine booking a vacation with one person handling flights, hotels, car rentals, activities, and travel insurance. They'd be overwhelmed.
+          </p>
+          <p>
+            Now imagine a team where one person specializes in flights, another in hotels, another in activities. Each expert handles what they're best at. That's <span class="term" data-definition="A multi-agent system is when multiple AI agents work together to accomplish a task. Each agent can have its own specialty, tools, and instructions — just like a team of human experts.">multi-agent systems</span>.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">When to use multi-agent vs. single agent</h2>
+
+          <div class="callout callout-info">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-content">
+              <strong class="callout-title">Start Simple</strong>
+              <p>Don't jump to multi-agent systems immediately. Start with a single agent. Only split into multiple agents when you hit concrete problems — like one agent getting confused trying to do too many different things, or tasks that naturally divide into specialized roles.</p>
+            </div>
+          </div>
+
+          <p>Use multiple agents when:</p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">📊</div>
+              <div class="step-body">
+                <strong>Tasks require diverse expertise</strong>
+                <p>Like healthcare — one agent for diagnostics, one for treatment plans, one for patient monitoring. Each has specialized knowledge.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">⚡</div>
+              <div class="step-body">
+                <strong>Large workloads need parallelization</strong>
+                <p>Processing 1000 customer support tickets — divide them among multiple agents working simultaneously.</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">🎯</div>
+              <div class="step-body">
+                <strong>One agent keeps choosing the wrong tool</strong>
+                <p>If a single agent with 20 tools keeps calling the wrong ones, split it into specialized agents with 3-5 tools each.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Multi-agent patterns</h2>
+
+          <div class="pattern-cards">
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+              <div class="pattern-icon" style="background: var(--color-actor-1)">🔄</div>
+              <h4 class="pattern-title">Sequential Handoff</h4>
+              <p class="pattern-desc">Agent A finishes, then hands the task to Agent B — like an assembly line. Example: Research agent → Writer agent → Editor agent.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+              <div class="pattern-icon" style="background: var(--color-actor-2)">💬</div>
+              <h4 class="pattern-title">Group Chat</h4>
+              <p class="pattern-desc">Multiple agents discuss and collaborate on a single task — like a team brainstorming session. One might suggest ideas, another critiques, another refines.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+              <div class="pattern-icon" style="background: var(--color-actor-3)">🏢</div>
+              <h4 class="pattern-title">Hierarchical</h4>
+              <p class="pattern-desc">A manager agent breaks tasks into subtasks and assigns them to worker agents — like a project manager delegating to a team.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+              <div class="pattern-icon" style="background: var(--color-actor-4)">🤝</div>
+              <h4 class="pattern-title">Collaborative Filtering</h4>
+              <p class="pattern-desc">Multiple expert agents contribute to a recommendation — like asking 3 stock analysts (fundamental, technical, industry) for their input before deciding.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Example: Refund processing system</h2>
+          <p>
+            Let's design a multi-agent system for handling customer refunds. Instead of one overwhelmed agent, we use specialists:
+          </p>
+
+          <div class="icon-rows">
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-1)">👤</div>
+              <div>
+                <strong>Customer Agent</strong>
+                <p>Handles customer communication — asks for order details, explains the refund process</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-2)">🔍</div>
+              <div>
+                <strong>Validation Agent</strong>
+                <p>Checks if the refund request is valid — order exists, within refund window, not already processed</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-3)">💳</div>
+              <div>
+                <strong>Payment Agent</strong>
+                <p>Processes the actual refund through the payment gateway — handles retries if the transaction fails</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-4)">⚖️</div>
+              <div>
+                <strong>Compliance Agent</strong>
+                <p>Ensures the refund follows company policies and regulations — flags suspicious patterns</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-5)">✅</div>
+              <div>
+                <strong>Resolution Agent</strong>
+                <p>Confirms completion, sends confirmation email, updates customer support ticket status</p>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            Each agent has a clear role. They work together sequentially — the customer agent hands off to validation, which hands off to payment, and so on.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">The tradeoff: Complexity vs. Specialization</h2>
+
+          <div class="callout callout-accent">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong class="callout-title">More Agents = More Coordination Overhead</strong>
+              <p>Every agent you add increases complexity. You need to handle communication between agents, manage failures (what if one agent crashes?), and debug interactions. Only use multi-agent when the benefits (specialization, parallelization) outweigh the coordination cost.</p>
+            </div>
+          </div>
+
+          <p>
+            Think of it like a company: a startup with 3 people can move fast because there's minimal coordination overhead. A 100-person company needs managers, processes, and meetings to coordinate. Same with agents.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Quiz: Designing systems</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-question-block" data-question="q5" data-correct="option-b">
+              <h3 class="quiz-question">You're building a system to answer customer support questions. The agent has access to 30 tools (knowledge base search, order lookup, refund API, shipping tracker, etc.) and keeps calling the wrong tools. What's your best next step?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Add more examples to the agent's instructions so it learns which tools to use</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Split into specialized agents — one for orders, one for refunds, one for shipping — each with 5-10 relevant tools</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Remove half the tools to simplify the agent's decision-making</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q5-feedback"></div>
+            </div>
+
+            <button class="quiz-check-btn" onclick="checkQuiz('module-5')">Check Answer</button>
+            <button class="quiz-reset-btn" onclick="resetQuiz('module-5')">Try Again</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 6: Production with Microsoft Agent Framework -->
+  <section class="module" id="module-6" style="background: var(--color-bg-warm)">
+    <div class="module-content">
+      <header class="module-header animate-in">
+        <span class="module-number">06</span>
+        <h1 class="module-title">Building Production-Ready Agents with Microsoft Agent Framework</h1>
+        <p class="module-subtitle">Everything you need to deploy reliable, observable, and scalable AI agents</p>
+      </header>
+
+      <div class="module-body">
+        <section class="screen animate-in">
+          <h2 class="screen-heading">From prototype to production</h2>
+          <p>
+            You've built agents. You've seen them work in notebooks. But deploying to production is different — you need monitoring, error handling, security, and scalability.
+          </p>
+          <p>
+            That's where <span class="term" data-definition="Microsoft Agent Framework (MAF) is an open-source framework for building production-ready AI agents. It provides observability, durability, security controls, and multi-agent orchestration patterns out of the box.">Microsoft Agent Framework (MAF)</span> shines. It's designed for enterprise production systems, not just demos.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">What makes MAF production-ready?</h2>
+
+          <div class="pattern-cards">
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+              <div class="pattern-icon" style="background: var(--color-actor-1)">📊</div>
+              <h4 class="pattern-title">Observability</h4>
+              <p class="pattern-desc">Built-in <span class="term" data-definition="OpenTelemetry is an industry-standard framework for collecting traces, metrics, and logs from your applications. It lets you see exactly what your agents are doing in production.">OpenTelemetry</span> integration — every tool call, reasoning step, and error is traced. You can see exactly what went wrong.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+              <div class="pattern-icon" style="background: var(--color-actor-2)">🔒</div>
+              <h4 class="pattern-title">Security</h4>
+              <p class="pattern-desc">Role-based access control, private data handling, content safety filters — all managed through Azure AI Foundry.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+              <div class="pattern-icon" style="background: var(--color-actor-3)">💾</div>
+              <h4 class="pattern-title">Durability</h4>
+              <p class="pattern-desc">Agents can pause, resume, and recover from errors. Long-running workflows won't lose progress if a server restarts.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+              <div class="pattern-icon" style="background: var(--color-actor-4)">🎛️</div>
+              <h4 class="pattern-title">Control</h4>
+              <p class="pattern-desc"><span class="term" data-definition="Human-in-the-loop means the agent pauses to ask a human for approval before taking certain actions — like confirming a $10,000 purchase before executing it.">Human-in-the-loop</span> workflows — agents ask for approval before executing critical actions.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+              <div class="pattern-icon" style="background: var(--color-actor-5)">⚡</div>
+              <h4 class="pattern-title">Multi-Agent Orchestration</h4>
+              <p class="pattern-desc">Built-in patterns for sequential, concurrent, group chat, and hierarchical agent coordination.</p>
+            </div>
+
+            <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+              <div class="pattern-icon" style="background: var(--color-accent)">🌐</div>
+              <h4 class="pattern-title">Cloud-Agnostic</h4>
+              <p class="pattern-desc">Run agents in containers, on-prem, or across multiple clouds — not locked into Azure.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Key MAF concepts</h2>
+
+          <div class="icon-rows">
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-1)">🧵</div>
+              <div>
+                <strong>Threads</strong>
+                <p><span class="term" data-definition="A thread in MAF is a persistent conversation history. It stores all messages between the user and agent across multiple turns. You can serialize threads to save them to a database and resume later.">Threads</span> store conversation history across turns — serialize them to a database to resume conversations days later.</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-2)">🔀</div>
+              <div>
+                <strong>Workflows</strong>
+                <p>Pre-defined multi-step processes where agents are components — like a flowchart with conditional branches and parallel execution.</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-3)">🔌</div>
+              <div>
+                <strong>Middleware</strong>
+                <p>Hooks that run before/after tool calls or LLM requests — useful for logging, authentication, or rate limiting.</p>
+              </div>
+            </div>
+
+            <div class="icon-row">
+              <div class="icon-circle" style="background: var(--color-actor-4)">🧠</div>
+              <div>
+                <strong>Memory Providers</strong>
+                <p>Plug in external memory services like <span class="term" data-definition="Mem0 is a service that provides persistent, long-term memory for AI agents. It remembers user preferences and context across sessions — like how Netflix remembers what you like to watch.">Mem0</span> to give agents long-term memory of user preferences.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Observability example</h2>
+          <p>
+            MAF automatically traces every action. Here's what you see in production when an agent runs:
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Trace ID: abc123</strong>
+                <p>User message received: "Book a flight to Paris"</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Span: LLM Request</strong>
+                <p>Sent 1 message to gpt-4o | Tokens used: 150 | Latency: 1.2s</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Span: Tool Execution</strong>
+                <p>Called search_flights("Paris") | Result: 5 flights found | Latency: 0.8s</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Span: LLM Request</strong>
+                <p>Sent 2 messages (with tool result) to gpt-4o | Tokens used: 320 | Latency: 1.5s</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">📍</div>
+              <div class="step-body">
+                <strong>Complete</strong>
+                <p>Agent response: "I found 5 flights to Paris. Here are the top 3 options..." | Total time: 3.5s</p>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            Every step is logged. If something breaks, you know exactly where and why.
+          </p>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Your journey from here</h2>
+          <p>
+            You've learned the fundamentals:
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>What AI Agents are</strong>
+                <p>Systems that use LLMs to take actions in the real world using tools</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>How to build your first agent</strong>
+                <p>Using MAF to connect to Azure AI Foundry and define tools</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>Design patterns</strong>
+                <p>Tool Use, Agentic RAG, Planning, Multi-Agent, and Metacognition</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>Giving agents superpowers with tools</strong>
+                <p>Database queries, APIs, code execution, web search, and more</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>When to use multiple agents</strong>
+                <p>Dividing complex tasks among specialists for better results</p>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <strong>Production deployment with MAF</strong>
+                <p>Observability, security, durability, and orchestration for enterprise systems</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-accent" style="margin-top: var(--space-12)">
+            <div class="callout-icon">🎓</div>
+            <div class="callout-content">
+              <strong class="callout-title">What's Next?</strong>
+              <p>This course covered the essentials to get you started. To go deeper, explore the full <a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" style="color: var(--color-accent); text-decoration: underline;">AI Agents for Beginners</a> repository on GitHub — it has 15+ lessons, Jupyter notebooks with runnable code, and advanced topics like RAG, planning patterns, metacognition, agentic protocols (MCP, A2A), context engineering, and more.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen animate-in">
+          <h2 class="screen-heading">Final quiz: Putting it all together</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-question-block" data-question="q6" data-correct="option-b">
+              <h3 class="quiz-question">You're deploying an agent to production that processes customer refunds. It needs to query a database, call a payment API, and send confirmation emails. What's the most important production consideration?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="option-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Use the fastest LLM model to minimize latency</span>
+                </button>
+                <button class="quiz-option" data-value="option-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Add observability (tracing all actions) so you can debug failures in production</span>
+                </button>
+                <button class="quiz-option" data-value="option-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Split into multiple agents — one for database, one for payments, one for emails</span>
+                </button>
+              </div>
+              <div class="quiz-feedback" id="q6-feedback"></div>
+            </div>
+
+            <button class="quiz-check-btn" onclick="checkQuiz('module-6')">Check Answer</button>
+            <button class="quiz-reset-btn" onclick="resetQuiz('module-6')">Try Again</button>
+          </div>
+        </section>
+
+        <section class="screen animate-in" style="text-align: center; padding: var(--space-16) 0;">
+          <h2 class="screen-heading">🎉 Congratulations!</h2>
+          <p style="font-size: var(--text-lg); max-width: 60ch; margin: var(--space-6) auto;">
+            You've completed the AI Agents for Beginners interactive course. You now understand how agents work, how to build them, and how to deploy them to production.
+          </p>
+          <p style="font-size: var(--text-base); max-width: 60ch; margin: var(--space-6) auto; color: var(--color-text-secondary);">
+            This course was generated with <a href="https://github.com/zarazhangrui/codebase-to-course" target="_blank" style="color: var(--color-accent); text-decoration: underline;">codebase-to-course</a>, a skill for turning any codebase into an interactive learning experience.
+          </p>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ========== PROGRESS BAR ==========
+      const progressBar = document.getElementById('progress-bar');
+
+      function updateProgressBar() {
+        const scrollTop = window.scrollY;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+
+      window.addEventListener('scroll', () => {
+        requestAnimationFrame(updateProgressBar);
+      }, { passive: true });
+
+      // ========== NAVIGATION DOTS ==========
+      const modules = document.querySelectorAll('.module');
+      const navDots = document.querySelectorAll('.nav-dot');
+
+      function updateNavDots() {
+        const scrollPos = window.scrollY + window.innerHeight / 2;
+
+        modules.forEach((module, index) => {
+          const moduleTop = module.offsetTop;
+          const moduleBottom = moduleTop + module.offsetHeight;
+
+          if (scrollPos >= moduleTop && scrollPos < moduleBottom) {
+            navDots.forEach(dot => dot.classList.remove('current'));
+            navDots[index].classList.add('current', 'visited');
+          }
+        });
+      }
+
+      window.addEventListener('scroll', () => {
+        requestAnimationFrame(updateNavDots);
+      }, { passive: true });
+
+      window.scrollToModule = function(moduleId) {
+        document.getElementById(moduleId).scrollIntoView({ behavior: 'smooth' });
+      };
+
+      // ========== KEYBOARD NAVIGATION ==========
+      let currentModuleIndex = 0;
+
+      document.addEventListener('keydown', (e) => {
+        if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+          if (currentModuleIndex < modules.length - 1) {
+            currentModuleIndex++;
+            modules[currentModuleIndex].scrollIntoView({ behavior: 'smooth' });
+          }
+          e.preventDefault();
+        }
+
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+          if (currentModuleIndex > 0) {
+            currentModuleIndex--;
+            modules[currentModuleIndex].scrollIntoView({ behavior: 'smooth' });
+          }
+          e.preventDefault();
+        }
+      });
+
+      // ========== SCROLL ANIMATIONS ==========
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+
+      document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+
+      // ========== GLOSSARY TOOLTIPS ==========
+      let activeTooltip = null;
+
+      function positionTooltip(term, tip) {
+        const rect = term.getBoundingClientRect();
+        const tipWidth = 300;
+        let left = rect.left + rect.width / 2 - tipWidth / 2;
+        left = Math.max(8, Math.min(left, window.innerWidth - tipWidth - 8));
+
+        document.body.appendChild(tip);
+        const tipHeight = tip.offsetHeight;
+
+        if (rect.top - tipHeight - 8 < 0) {
+          tip.style.top = (rect.bottom + 8) + 'px';
+          tip.classList.add('flip');
+        } else {
+          tip.style.top = (rect.top - tipHeight - 8) + 'px';
+          tip.classList.remove('flip');
+        }
+
+        tip.style.left = left + 'px';
+      }
+
+      document.querySelectorAll('.term').forEach(term => {
+        const tip = document.createElement('span');
+        tip.className = 'term-tooltip';
+        tip.textContent = term.dataset.definition;
+
+        term.addEventListener('mouseenter', () => {
+          if (activeTooltip && activeTooltip !== tip) {
+            activeTooltip.classList.remove('visible');
+            activeTooltip.remove();
+          }
+          positionTooltip(term, tip);
+          requestAnimationFrame(() => tip.classList.add('visible'));
+          activeTooltip = tip;
+        });
+
+        term.addEventListener('mouseleave', () => {
+          tip.classList.remove('visible');
+          setTimeout(() => { if (!tip.classList.contains('visible')) tip.remove(); }, 150);
+          activeTooltip = null;
+        });
+
+        term.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (activeTooltip && activeTooltip !== tip) {
+            activeTooltip.classList.remove('visible');
+            activeTooltip.remove();
+          }
+          if (tip.classList.contains('visible')) {
+            tip.classList.remove('visible');
+            tip.remove();
+            activeTooltip = null;
+          } else {
+            positionTooltip(term, tip);
+            requestAnimationFrame(() => tip.classList.add('visible'));
+            activeTooltip = tip;
+          }
+        });
+      });
+
+      document.addEventListener('click', () => {
+        if (activeTooltip) {
+          activeTooltip.classList.remove('visible');
+          activeTooltip.remove();
+          activeTooltip = null;
+        }
+      });
+
+      // ========== QUIZ LOGIC ==========
+      const quizExplanations = {
+        'q1': {
+          correct: 'Exactly! Summarizing text is just generation — the LLM reads the PDF and writes a summary. No external actions needed, so no agent required. An agent would only be necessary if you needed to, say, email the summary or save it to a database.',
+          incorrect: 'Not quite. Summarizing text is pure generation — you\'re just reading and writing, not taking actions in the world. An LLM alone can handle this. You\'d need an agent if you were also booking hotels based on the summary, or sending emails, but not for text generation.'
+        },
+        'q2': {
+          correct: 'Exactly! The agent\'s instructions (its "personality" or system prompt) should tell it to prioritize proximity to the airport. If it\'s not doing that, the instructions need to be more specific — something like "Always prioritize hotels within 10 miles of the airport unless the user specifies otherwise."',
+          incorrect: 'Not this time. The LLM isn\'t hallucinating — it got real hotel data from the booking system. And the environment data might be fine. The problem is likely the agent\'s instructions don\'t explicitly say "pick hotels near the airport." Without that guidance, the agent might optimize for price or reviews instead.'
+        },
+        'q3': {
+          correct: 'Exactly! The LLM has been trained on vast amounts of travel data, so it "knows" destinations like Paris and Tokyo. Without clear instructions to ALWAYS call the tool, it might decide to answer from its training data instead. To fix this, make the agent\'s instructions more explicit: "You must use the get_destinations tool to find available destinations — never recommend places that aren\'t in the tool\'s list."',
+          incorrect: 'Not quite. The @tool decorator is present (otherwise the framework wouldn\'t know the function exists at all). And the docstring is clear enough. The real issue is that the LLM has been trained on travel data, so it "knows" destinations already. It decided it didn\'t need to call the tool. To fix this, make the instructions more strict: "You MUST use get_destinations — never suggest places that aren\'t in the tool\'s result."'
+        },
+        'q4': {
+          correct: 'Exactly! The most common reason agents hallucinate instead of calling tools is that the instructions aren\'t explicit enough. The LLM might have been trained on sales data, so it "knows" some numbers. You need to be very direct: "You MUST use the database tool for all sales queries. Never make up numbers or use your training data." This forces the agent to always call the tool.',
+          incorrect: 'Not quite. Adding more examples or switching models might help slightly, but the root cause is usually the instructions. The LLM has probably been trained on sales data, so it thinks it can answer without the tool. Make the instructions explicit and mandatory: "You MUST use the database tool for all sales queries — never make up numbers."'
+        },
+        'q5': {
+          correct: 'Exactly! When a single agent has too many tools, it gets confused about which one to use — like asking one person to be an expert in 30 different fields. By splitting into specialized agents (Orders Agent with order-related tools, Refunds Agent with refund tools, etc.), each agent has a focused set of 5-10 tools that are all relevant to its domain. This dramatically reduces confusion.',
+          incorrect: 'Not quite. Adding examples or removing tools might help a bit, but the real problem is cognitive overload — 30 tools is too many for one agent to reliably choose from. The best solution is to split into specialized agents (Orders, Refunds, Shipping), each with 5-10 relevant tools. This way each agent has expertise in one domain.'
+        },
+        'q6': {
+          correct: 'Exactly! In production, you need to know what went wrong when things fail. Observability (tracing every tool call, LLM request, and error) lets you debug issues that only happen in production — like "why did this refund fail for this one customer?" Without tracing, you\'re flying blind. MAF provides built-in OpenTelemetry integration for this.',
+          incorrect: 'Not quite. Speed and architecture matter, but the most critical thing for production is observability. When a refund fails at 2am, you need to trace exactly what happened — which tool was called, what the response was, where it broke. Without observability, debugging production issues is nearly impossible. MAF provides built-in OpenTelemetry tracing for this.'
+        }
+      };
+
+      window.selectOption = function(btn) {
+        const block = btn.closest('.quiz-question-block');
+        block.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+        btn.classList.add('selected');
+      };
+
+      window.checkQuiz = function(sectionId) {
+        const container = document.querySelector(`#${sectionId} .quiz-container`);
+        const questions = container.querySelectorAll('.quiz-question-block');
+
+        questions.forEach(q => {
+          const selected = q.querySelector('.quiz-option.selected');
+          const feedback = q.querySelector('.quiz-feedback');
+          const correctValue = q.dataset.correct;
+          const qId = q.dataset.question;
+
+          if (!selected) {
+            feedback.textContent = 'Pick an answer first!';
+            feedback.className = 'quiz-feedback show error';
+            return;
+          }
+
+          if (selected.dataset.value === correctValue) {
+            selected.classList.add('correct');
+            feedback.innerHTML = '<strong>Exactly!</strong> ' + quizExplanations[qId].correct;
+            feedback.className = 'quiz-feedback show success';
+          } else {
+            selected.classList.add('incorrect');
+            q.querySelector(`[data-value="${correctValue}"]`).classList.add('correct');
+            feedback.innerHTML = '<strong>Not quite.</strong> ' + quizExplanations[qId].incorrect;
+            feedback.className = 'quiz-feedback show error';
+          }
+
+          q.querySelectorAll('.quiz-option').forEach(o => o.disabled = true);
+        });
+      };
+
+      window.resetQuiz = function(sectionId) {
+        const container = document.querySelector(`#${sectionId} .quiz-container`);
+        const questions = container.querySelectorAll('.quiz-question-block');
+
+        questions.forEach(q => {
+          q.querySelectorAll('.quiz-option').forEach(o => {
+            o.classList.remove('selected', 'correct', 'incorrect');
+            o.disabled = false;
+          });
+          q.querySelector('.quiz-feedback').className = 'quiz-feedback';
+        });
+      };
+
+      // ========== CHAT ANIMATION ==========
+      const chatStates = {};
+
+      const actors = {
+        'user': { initials: 'U', color: 'var(--color-actor-5)' },
+        'framework': { initials: 'F', color: 'var(--color-actor-1)' },
+        'llm': { initials: 'L', color: 'var(--color-actor-2)' },
+        'tool': { initials: 'T', color: 'var(--color-actor-3)' }
+      };
+
+      window.playChatNext = function(chatId) {
+        if (!chatStates[chatId]) {
+          chatStates[chatId] = { index: 0 };
+        }
+
+        const state = chatStates[chatId];
+        const messages = document.querySelectorAll(`#chat-messages-${chatId} .chat-message`);
+
+        if (state.index >= messages.length) return;
+
+        const msg = messages[state.index];
+        const sender = msg.dataset.sender;
+
+        const typing = document.getElementById(`chat-typing-${chatId}`);
+        const avatar = document.getElementById(`typing-avatar-${chatId}`);
+        avatar.textContent = actors[sender].initials;
+        avatar.style.background = actors[sender].color;
+        typing.style.display = 'flex';
+
+        setTimeout(() => {
+          typing.style.display = 'none';
+          msg.style.display = 'flex';
+          msg.style.animation = 'fadeSlideUp 0.3s var(--ease-out)';
+          state.index++;
+          document.getElementById(`chat-progress-${chatId}`).textContent = `${state.index} / ${messages.length} messages`;
+        }, 800);
+      };
+
+      window.playChatAll = function(chatId) {
+        const interval = setInterval(() => {
+          const state = chatStates[chatId] || { index: 0 };
+          const messages = document.querySelectorAll(`#chat-messages-${chatId} .chat-message`);
+
+          if (state.index >= messages.length) {
+            clearInterval(interval);
+            return;
+          }
+          playChatNext(chatId);
+        }, 1200);
+      };
+
+      window.resetChat = function(chatId) {
+        chatStates[chatId] = { index: 0 };
+        const messages = document.querySelectorAll(`#chat-messages-${chatId} .chat-message`);
+        messages.forEach(msg => {
+          msg.style.display = 'none';
+        });
+        document.getElementById(`chat-progress-${chatId}`).textContent = `0 / ${messages.length} messages`;
+      };
+    })();
+  </script>
+</body>
+</html>
